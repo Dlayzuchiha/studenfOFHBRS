@@ -1,8 +1,15 @@
 package org.hbrs.s1.ws22.uebung1.view;
 
-public class Client {
+import org.hbrs.s1.ws22.uebung1.control.GermanTranslator;
 
-		/*
+public class Client {
+	public static GermanTranslator _germanTranslator;
+
+	public Client(GermanTranslator translator) {
+		_germanTranslator = translator;
+	}
+
+	/*
 		 * Methode zur Ausgabe einer Zahl auf der Console (auch bezeichnet als CLI, Terminal)
 		 */
 		public void display( int aNumber ){
@@ -13,7 +20,7 @@ public class Client {
 			// Strenge Implementierung gegen das Interface Translator gewuenscht!
 
 			System.out.println("Das Ergebnis der Berechnung: " +
-					"[das Ergebnis an dieser Stelle]"  );
+					_germanTranslator.translateNumber(aNumber)  );
 
 		}
 }
