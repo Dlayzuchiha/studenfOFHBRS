@@ -10,6 +10,6 @@ public class Factory {
 
     public static void main(String[] args) {
         Client client = new Client((GermanTranslator) new Factory().createTranslator());
-        client.display(0);
+        client.display(7);
     }
 }

@@ -1,17 +1,21 @@
 package org.hbrs.se1.ws22.uebung2;
 
+import org.hbrs.se1.ws22.uebung3.persistence.PersistenceException;
+import org.hbrs.se1.ws22.uebung3.persistence.PersistenceStrategyStream;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class Container {
 
-    public ArrayList<ConcreteMember> concreteMembers = new ArrayList<>();
+    public List<ConcreteMember> concreteMembers = new ArrayList<>();
 
     public Container() {
 
     }
 
-    public static void main(String[] args) throws ContainerException {
-        Container container = new Container();
+    public static void main(String[] args) throws ContainerException, PersistenceException {
+       /* Container container = new Container();
         ConcreteMember objekt0 = new ConcreteMember();
         ConcreteMember objekt1 = new ConcreteMember();
 
@@ -30,12 +34,27 @@ public class Container {
         System.out.println("Anzahl an abgespeicherten Objekten: " + container.size());
 
         container.dump();
+
+        */
+        GenericContainer genericContainer = GenericContainer.getInstance();
+        genericContainer.setPersistenceStrategy(new PersistenceStrategyStream());
+
+        genericContainer.addMember(new ConcreteMember());
+        genericContainer.dump();
+        System.out.println(genericContainer.getAnzahl());
+
+        genericContainer.store();
     }
 
     public void addMember(ConcreteMember member) throws ContainerException {
+
+        if (member == null){
+            throw new ContainerException();
+        }
+
         for (ConcreteMember concreteMember : concreteMembers) {
             if (concreteMember.getID() == member.getID())
-                throw new ContainerException("Das Member-Objekt mit der ID: " + member.getID() + " ist bereits vorhanden!");
+                throw new ContainerException(member.getID().toString());
         }
         concreteMembers.add(member);
     }
