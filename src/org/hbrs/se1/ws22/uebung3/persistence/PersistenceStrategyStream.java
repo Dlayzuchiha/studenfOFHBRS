@@ -6,7 +6,7 @@ import java.util.List;
 public class PersistenceStrategyStream<E> implements PersistenceStrategy<E> {
 
     // URL of file, in which the objects are stored
-    private String location = "https://github.com/Dlayzuchiha/studenfOFHBRS.git/objects.ser";
+    private String location = "objects.ser";
 
     List<E> newListe = null;
     ObjectInputStream ois = null;
@@ -27,27 +27,6 @@ public class PersistenceStrategyStream<E> implements PersistenceStrategy<E> {
      * and save
      */
     public void openConnection() throws PersistenceException {
-        try {
-            fis = new FileInputStream(location);
-            try {
-                ois = new ObjectInputStream(fis);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            fos = new FileOutputStream(location);
-            try {
-                oos = new ObjectOutputStream(fos);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
 
 
     }
@@ -57,13 +36,20 @@ public class PersistenceStrategyStream<E> implements PersistenceStrategy<E> {
      * Method for closing the connections to a stream
      */
     public void closeConnection() throws PersistenceException {
-        try {
-            ois.close();
-            oos.close();
-            fis.close();
-            fos.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (oos != null) {
+            try {
+                oos.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        if (ois != null) {
+            try {
+                ois.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -73,7 +59,18 @@ public class PersistenceStrategyStream<E> implements PersistenceStrategy<E> {
      */
     public void save(List<E> member) throws PersistenceException {
         try {
-            oos.writeObject(newListe);
+            fos = new FileOutputStream(location);
+
+            oos = new ObjectOutputStream(fos);
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            oos.writeObject(member);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -107,7 +104,19 @@ public class PersistenceStrategyStream<E> implements PersistenceStrategy<E> {
         // and finally close the streams (guess where this could be...?)
 
         try {
-            Object obj = ois.readObject();
+            fis = new FileInputStream(location);
+
+            ois = new ObjectInputStream(fis);
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Object obj = null;
+        try {
+            obj = ois.readObject();
             if (obj instanceof List<?>) {
                 newListe = (List) obj;
             }
@@ -117,6 +126,7 @@ public class PersistenceStrategyStream<E> implements PersistenceStrategy<E> {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+
 
     }
 }
