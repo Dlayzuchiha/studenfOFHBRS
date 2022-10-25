@@ -31,7 +31,7 @@ public class GenericContainer<E extends Member> {
      *  Gibt die aktuelle Member-Liste zurueck
      */
     public List<E> getCurrentList() {
-        return (List<E>) liste;
+        return liste;
     }
 
     /*
@@ -103,20 +103,7 @@ public class GenericContainer<E extends Member> {
      * Methode zur Ausgabe aller IDs der Member-Objekte
      *
      */
-    public void dump() {
-        System.out.println("Ausgabe aller Memberen: ");
-        // Loesung mit For each:
-        for (E p : liste) {
-            System.out.println(p.toString());
-        }
 
-        // Loesung mit Iterator:
-        // Iterator<Member> i = liste.iterator();
-        //  while (  i.hasNext() ) {
-        //	   Member p = i.next();
-        //	   System.out.println("ID: " + p.getID() );
-        //  }
-    }
 
     /*
      * Interne Methode zur Ermittlung einer Member
